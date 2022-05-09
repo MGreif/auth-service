@@ -7,6 +7,7 @@ import {
   MessageProperties,
 } from 'amqplib'
 import * as events from 'events'
+import { logger } from './logger'
 
 export class Messanger {
   static channel: Channel
@@ -15,13 +16,13 @@ export class Messanger {
 
   static async initiateConnection() {
     const connection = await client.connect('amqp://localhost')
-    console.log('connected to message broker')
+    logger.debug('connected to message broker')
     Messanger.connection = connection
   }
 
   static async createChannel() {
     const channel: Channel = await Messanger.connection.createChannel()
-    console.log('channel created')
+    logger.debug('channel created')
     Messanger.channel = channel
   }
 
@@ -87,15 +88,13 @@ export class SynchronousMessage implements Message {
       durable: false,
       autoDelete: true,
     })
-    console.log(
-      'created response queue',
-      SynchronousMessage.responseQueueString
+    logger.debug(
+      'created response queue ' + SynchronousMessage.responseQueueString
     )
     await Messanger.channel.consume(
       SynchronousMessage.responseQueueString,
       (msg: Message) => {
-        console.log('MESSAGE RECEIVED', msg.content.toString())
-        if (!msg) return console.log('NO MSG')
+        if (!msg) return
         SynchronousMessage.eventEmitter.emit(
           msg.properties.correlationId,
           msg.content.toString()
@@ -106,25 +105,15 @@ export class SynchronousMessage implements Message {
     )
   }
 
-  private deleteResponseQeue() {
-    Messanger.channel.deleteQueue(SynchronousMessage.responseQueueString)
-    console.log(
-      'deleted response queue',
-      SynchronousMessage.responseQueueString
-    )
-  }
-
   send() {
     return new Promise((resolve, reject) => {
       Messanger.channel.assertQueue(this.queue)
-      console.log('used queue', this.queue)
 
       Messanger.channel.sendToQueue(this.queue, this.content, {
         replyTo: SynchronousMessage.responseQueueString,
         correlationId: this.correlationId,
       })
       SynchronousMessage.eventEmitter.on(this.correlationId, resolve)
-      console.log('send message queue', this.queue)
     })
   }
 }
