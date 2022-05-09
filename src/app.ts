@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as cookieParser from 'cookie-parser'
 import * as cors from 'cors'
-import indexRouter from './routes/index'
 import authRouter from './routes/auth.route'
 import { errorHandler } from './errorHandler'
 import { loggerMiddleware } from './config/logger'
@@ -18,8 +17,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(loggerMiddleware)
 
-app.use('/', indexRouter)
-app.use('/auth', authRouter)
+app.use('/', authRouter)
 
 app.use(errorHandler)
 
