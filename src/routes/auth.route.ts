@@ -41,7 +41,9 @@ router.post(
       }
 
       const jwtToken = createJWT(user)
-      res.cookie('token', jwtToken, {})
+      res.cookie('token', jwtToken, {
+        domain: '.greif.me',
+      })
       res.json(user)
     } catch (err) {
       next(err)
