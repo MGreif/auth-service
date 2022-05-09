@@ -10,6 +10,7 @@ const app = express()
 app.use(express.json())
 const corsOptions = {
   origin: ['http://frontend.greif.me', 'http://localhost'],
+  credentials: true,
 }
 
 app.use(cors(corsOptions))
