@@ -9,7 +9,7 @@ const app = express()
 
 app.use(express.json())
 const corsOptions = {
-  origin: ['http://frontend.greif.me', 'http://localhost'],
+  origin: ['http://greif.me', 'http://localhost'],
   credentials: true,
 }
 
