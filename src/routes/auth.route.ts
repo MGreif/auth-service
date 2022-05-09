@@ -38,7 +38,7 @@ router.post(
 
       const jwtToken = createJWT(user)
       res.cookie('token', jwtToken, {
-        domain: 'frontend.greif.me',
+        domain: 'http://frontend.greif.me',
       })
       res.json(user)
     } catch (err) {
