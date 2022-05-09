@@ -28,6 +28,10 @@ router.post(
       ).send()) as string
 
       const user: TUser = JSON.parse(userRaw) as TUser
+      if (!user)
+        throw new BadFieldsError([
+          new ErrorField('username', 'Username does not exist'),
+        ])
       const passwordIsCorrect = comparePasswords(password, user.password)
 
       if (!passwordIsCorrect) {
@@ -39,6 +43,7 @@ router.post(
       const jwtToken = createJWT(user)
       res.cookie('token', jwtToken, {
         domain: 'http://frontend.greif.me',
+        path: '/',
       })
       res.json(user)
     } catch (err) {
