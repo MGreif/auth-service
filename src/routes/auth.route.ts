@@ -9,7 +9,7 @@ import { TUser } from '../types'
 const router = express.Router()
 
 router.get('/', function (req, res) {
-  res.send('auth-service works!')
+  res.send('auth-service works! (version 0.1.0)')
 })
 
 router.post(
