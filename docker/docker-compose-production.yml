@@ -5,6 +5,7 @@ services:
     container_name: rabbitmq
   auth-service:
     container_name: auth-service
+    image: auth-service:release
     network_mode: host
     env_file:
       - ../.env
