@@ -1,0 +1,16 @@
+services:
+  rabbitmq:
+    network_mode: host
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+  auth-service:
+    container_name: auth-service
+    network_mode: host
+    env_file:
+      - ../.env
+    build: ..
+    volumes:
+      - ../logs:/app/logs
+    depends_on:
+      rabbitmq:
+        condition: service_started
