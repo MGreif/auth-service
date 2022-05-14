@@ -1,8 +1,4 @@
 services:
-  rabbitmq:
-    network_mode: host
-    image: rabbitmq:3-management
-    container_name: rabbitmq
   auth-service:
     container_name: auth-service
     image: auth-service:release
@@ -12,6 +8,3 @@ services:
     build: ..
     volumes:
       - /home/mgreif/logs/auth-service:/app/logs
-    depends_on:
-      rabbitmq:
-        condition: service_started
